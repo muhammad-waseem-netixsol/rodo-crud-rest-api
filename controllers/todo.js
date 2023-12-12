@@ -3,23 +3,23 @@ const Todo = require("../models/todo");
 exports.postCreateNewTodo = (req, res, next) => {
     const text = req.body.text;
     if(text === ""){
-        return res.send({validationError : "you have entered empty todo..."})
+        return res.json({validationError : "you have entered empty todo..."})
      }
     const todo = new Todo({
         text,
         status: "TODO"
     });
     todo.save().then(rec => {
-        res.send(rec);
+        res.json(rec);
     }).catch(err => {
-        res.send({msg: "error"}); 
+        res.json({msg: "error"}); 
     })
 };
 // get all todos
 exports.getAllTodos = (req, res, post) => {
     Todo.find().then(todos => {
-        res.send(todos);
-    }).catch(err => res.send({err: "error"}));
+        res.json(todos);
+    }).catch(err => res.json({err: "error"}));
 };
 // edit todo
 exports.postEditTodo = (req, res, post) => {
@@ -27,7 +27,7 @@ exports.postEditTodo = (req, res, post) => {
     const text = req.body.text;
     const status = req.body.status;
     if(text === ""){
-       return res.send({validationError : "you have entered empty todo..."})
+       return res.json({validationError : "you have entered empty todo..."})
     }
     const updated = {
         text,
@@ -36,7 +36,7 @@ exports.postEditTodo = (req, res, post) => {
     const filter = {
 		_id: id,
 	};
-    Todo.updateOne(filter, updated).then(updatedTodo => res.send(updatedTodo)).catch(err => res.send({err: "error"}))
+    Todo.updateOne(filter, updated).then(updatedTodo => res.json(updatedTodo)).catch(err => res.json({err: "error"}))
 };
 // delete todo
 exports.postDelete = (req, res, next) => {
@@ -49,5 +49,5 @@ exports.postMarkAsDone = (req, res, next) => {
     const text = req.body.text;
     const filter = {_id:id};
     const update = {text,status: "DONE"};
-    Todo.updateOne(filter,update).then(marked => res.send(marked)).catch(err => res.send({err: "error"}));
+    Todo.updateOne(filter,update).then(marked => res.json(marked)).catch(err => res.json({err: "error"}));
 };
